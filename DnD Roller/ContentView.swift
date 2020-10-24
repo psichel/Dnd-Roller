@@ -10,14 +10,14 @@ import SwiftUI
 struct ContentView: View {
 
     @State private var dice = [
-        Die(sides: 4),
-        Die(sides: 6),
-        Die(sides: 8),
-        Die(sides: 10),
-        Die(sides: 12),
-        Die(sides: 20),
+        Die(sides: 4, imageName: "dice4"),
+        Die(sides: 6, imageName: "dice6"),
+        Die(sides: 8, imageName: "dice8"),
+        Die(sides: 10, imageName: "dice10"),
+        Die(sides: 12, imageName: "dice12"),
+        Die(sides: 20, imageName: "dice20"),
         //Die(sides: 100),
-        Die(sides: 17),     // last one has custom number of sides
+        Die(sides: 17, imageName: "dice20"),     // last one has custom number of sides
     ]
     @State private var dieIndex = 0
     @State private var rollMessage = ""
@@ -25,7 +25,6 @@ struct ContentView: View {
     @State private var customSidesTxt = ""
     @State private var customSides = 17
     @State private var customIndex = 6      // must be updated if array size changes
-    @State private var dieImage = Image("dice20")
     @State private var animationAmount = 0.0
     @Environment(\.verticalSizeClass) var sizeClass
     
@@ -46,7 +45,6 @@ struct ContentView: View {
                             Button("Roll") {
                                 self.hideKeyboard()
                                 dieIndex = i
-                                dieImage = Image("dice\(dice[i].sides)")
                                 calculateRoll(die: dice[i])
                                 withAnimation(.linear(duration: 1.25)) {
                                     self.animationAmount += 640
@@ -95,8 +93,8 @@ struct ContentView: View {
                 Button("Roll") {
                     if let value = Int(cx.customSidesTxt) {
                         self.hideKeyboard()
+                        cx.dieIndex = cx.customIndex
                         cx.dice[cx.customIndex].sides = value
-                        cx.dieImage = Image("dice20")
                         cx.calculateRoll(die: cx.dice[cx.customIndex])
                         withAnimation(.linear(duration: 1.25)) {
                             cx.animationAmount += 640
@@ -117,7 +115,7 @@ struct ContentView: View {
                 Text(cx.rollMessage)
                     .font(.largeTitle)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .leading)
-                cx.dieImage
+                Image(cx.dice[cx.dieIndex].imageName)
                     .rotation3DEffect(.degrees(cx.animationAmount), axis: (x: 0, y: 0, z: 1))
             }
         }
@@ -134,6 +132,7 @@ struct ContentView: View {
         var id = UUID()
         var sides: Int
         var howMany = 1
+        var imageName: String
         
         func rollDie() -> Int {
             let total = Int.random(in: 1...sides)
