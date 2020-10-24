@@ -42,7 +42,7 @@ struct ContentView: View {
                             Text("\(dice[i].howMany) d\(dice[i].sides)")
                                 .font(.system(size: 20))
                             Spacer()
-                            Button("Roll") {
+                            Button(action: {
                                 self.hideKeyboard()
                                 dieIndex = i
                                 calculateRoll(die: dice[i])
@@ -50,8 +50,14 @@ struct ContentView: View {
                                     self.animationAmount += 640
                                 }
                                             
+                            }) {
+                                Text("Roll")
+                                    .padding(4)
+                                    .foregroundColor(Color(.label))
+                                    .background(Color.yellow)
+                                    .cornerRadius(7)
+                                    
                             }
-                            .buttonStyle(DefaultButtonStyle())
                         }
                     }
                     customDieView(cx: self)
@@ -90,7 +96,7 @@ struct ContentView: View {
                     .keyboardType(.decimalPad)
 
                 Spacer()
-                Button("Roll") {
+                Button(action: {
                     if let value = Int(cx.customSidesTxt) {
                         self.hideKeyboard()
                         cx.dieIndex = cx.customIndex
@@ -103,6 +109,12 @@ struct ContentView: View {
                     else { cx.customSidesTxt = ""
                         cx.rollMessage = "Please enter a valid number of sides."
                     }
+                }) {
+                    Text("Roll")
+                        .padding(4)
+                        .foregroundColor(Color(.label))
+                        .background(Color.yellow)
+                        .cornerRadius(7)
                 }
             }
         }
