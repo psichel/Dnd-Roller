@@ -24,7 +24,7 @@ struct ContentView: View {
     
     @State private var customSidesTxt = ""
     @State private var customSides = 17
-    @State private var customIndex = 6      // must be updated if array size changes
+    @State private var customDieOffset = 6      // must be updated if array size changes
     @State private var animationAmount = 0.0
     @Environment(\.verticalSizeClass) var sizeClass
     
@@ -34,35 +34,13 @@ struct ContentView: View {
             Form {
                 Section {
                     ForEach (0..<dice.count-1, id:\.self) { i in
-                        HStack {
-                            Stepper(value: $dice[i].howMany, in: 1...10, step: 1) {
-                                Text("\(dice[i].howMany)")
-                            }
-                            .labelsHidden()
-                            Text("\(dice[i].howMany) d\(dice[i].sides)")
-                                .font(.system(size: 20))
-                            Spacer()
-                            Button(action: {
-                                self.hideKeyboard()
-                                dieIndex = i
-                                calculateRoll(die: dice[i])
-                                withAnimation(.linear(duration: 1.25)) {
-                                    self.animationAmount += 640
-                                }
-                                            
-                            }) {
-                                Text("Roll")
-                                    .padding(4)
-                                    .foregroundColor(Color(.label))
-                                    .background(Color.yellow)
-                                    .cornerRadius(7)
-                                    
-                            }
-                        }
+                        dieTableRow(cx: self, row:i)
                     }
-                    customDieView(cx: self)
+                    customDieTableRow(cx: self, row:customDieOffset)
                 }
-                resultView(cx: self)
+                Section {
+                    resultView(cx: self)
+                }
             }
             .navigationBarTitle("DnD Roller")
             .padding([.bottom], -1)
@@ -71,25 +49,50 @@ struct ContentView: View {
     }
     
 // MARK: - subviews
-    struct commonDieView: View {
+    struct dieTableRow: View {
         var cx: ContentView
+        var row: Int
         
         var body: some View {
-            Text("Hello World!")
+            HStack {
+                Stepper(value: cx.$dice[row].howMany, in: 1...10, step: 1) {
+                    Text("\(cx.dice[row].howMany)")
+                }
+                .labelsHidden()
+                Text("\(cx.dice[row].howMany) d\(cx.dice[row].sides)")
+                    .font(.system(size: 20))
+                Spacer()
+                Button(action: {
+                    self.hideKeyboard()
+                    cx.dieIndex = row
+                    cx.calculateRoll(die: cx.dice[row])
+                    withAnimation(.linear(duration: 1.25)) {
+                        cx.animationAmount += 640
+                    }
+                                
+                }) {
+                    Text("Roll")
+                        .padding(4)
+                        .foregroundColor(Color(.label))
+                        .background(Color.yellow)
+                        .cornerRadius(7)
+                }
+            }
         }
     }
     
-    struct customDieView: View {
+    struct customDieTableRow: View {
         var cx: ContentView
+        var row: Int
         
         var body: some View {
             HStack {
                 // custom number of sides
-                Stepper(value: cx.$dice[cx.customIndex].howMany, in: 1...10, step: 1) {
-                    Text("\(cx.dice[cx.customIndex].howMany)")
+                Stepper(value: cx.$dice[row].howMany, in: 1...10, step: 1) {
+                    Text("\(cx.dice[row].howMany)")
                 }
                 .labelsHidden()
-                Text("\(cx.dice[cx.customIndex].howMany) d")
+                Text("\(cx.dice[row].howMany) d")
                     .font(.system(size: 20))
                 TextField("Number of sides", text: cx.$customSidesTxt)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -99,9 +102,9 @@ struct ContentView: View {
                 Button(action: {
                     if let value = Int(cx.customSidesTxt) {
                         self.hideKeyboard()
-                        cx.dieIndex = cx.customIndex
-                        cx.dice[cx.customIndex].sides = value
-                        cx.calculateRoll(die: cx.dice[cx.customIndex])
+                        cx.dieIndex = row
+                        cx.dice[row].sides = value
+                        cx.calculateRoll(die: cx.dice[row])
                         withAnimation(.linear(duration: 1.25)) {
                             cx.animationAmount += 640
                         }
@@ -122,24 +125,27 @@ struct ContentView: View {
 
     struct resultView: View {
         var cx: ContentView
+        
         var body: some View {
-            VStack {
-                Text(cx.rollMessage)
-                    .font(.largeTitle)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .leading)
+            List {
+                Section {
+                    Text(cx.rollMessage)
+                        .font(.largeTitle)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .leading)
+                }
                 Image(cx.dice[cx.dieIndex].imageName)
                     .rotation3DEffect(.degrees(cx.animationAmount), axis: (x: 0, y: 0, z: 1))
             }
         }
     }
 
-// MARK: Preview
     struct ContentView_Previews: PreviewProvider {
         static var previews: some View {
             ContentView()
         }
     }
 
+// MARK: - Die
     struct Die: Identifiable, Codable {
         var id = UUID()
         var sides: Int
