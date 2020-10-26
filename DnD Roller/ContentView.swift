@@ -9,21 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @State private var dice = [
-        Die(sides: 4, imageName: "dice4"),
-        Die(sides: 6, imageName: "dice6"),
-        Die(sides: 8, imageName: "dice8"),
-        Die(sides: 10, imageName: "dice10"),
-        Die(sides: 12, imageName: "dice12"),
-        Die(sides: 20, imageName: "dice20"),
-        //Die(sides: 100),
-        Die(sides: 17, imageName: "dice20"),     // last one has custom number of sides
-    ]
+    @ObservedObject var myDice = Dice()
     @State private var dieIndex = 0
     @State private var rollMessage = ""
-    
-    @State private var customSidesTxt = ""
-    @State private var customSides = 17
     @State private var customDieOffset = 6      // must be updated if array size changes
     @State private var animationAmount = 0.0
     @Environment(\.verticalSizeClass) var sizeClass
@@ -33,7 +21,7 @@ struct ContentView: View {
         NavigationView {
             Form {
                 Section {
-                    ForEach (0..<dice.count-1, id:\.self) { i in
+                    ForEach (0..<myDice.diceArray.count-1, id:\.self) { i in
                         dieTableRow(cx: self, row:i)
                     }
                     customDieTableRow(cx: self, row:customDieOffset)
@@ -47,7 +35,7 @@ struct ContentView: View {
         }
         
     }
-    
+
 // MARK: - subviews
     struct dieTableRow: View {
         var cx: ContentView
@@ -55,17 +43,17 @@ struct ContentView: View {
         
         var body: some View {
             HStack {
-                Stepper(value: cx.$dice[row].howMany, in: 1...10, step: 1) {
-                    Text("\(cx.dice[row].howMany)")
+                Stepper(value: cx.$myDice.diceArray[row].howMany, in: 1...10, step: 1) {
+                    Text("\(cx.myDice.diceArray[row].howMany)")
                 }
                 .labelsHidden()
-                Text("\(cx.dice[row].howMany) d\(cx.dice[row].sides)")
+                Text("\(cx.myDice.diceArray[row].howMany) d\(cx.myDice.diceArray[row].sides)")
                     .font(.system(size: 20))
                 Spacer()
                 Button(action: {
                     self.hideKeyboard()
-                    cx.dieIndex = row
-                    cx.calculateRoll(die: cx.dice[row])
+                    cx.dieIndex = row   // used by resultView
+                    cx.calculateRoll(die: cx.myDice.diceArray[row])
                     withAnimation(.linear(duration: 1.25)) {
                         cx.animationAmount += 640
                     }
@@ -88,28 +76,28 @@ struct ContentView: View {
         var body: some View {
             HStack {
                 // custom number of sides
-                Stepper(value: cx.$dice[row].howMany, in: 1...10, step: 1) {
-                    Text("\(cx.dice[row].howMany)")
+                Stepper(value: cx.$myDice.diceArray[row].howMany, in: 1...10, step: 1) {
+                    Text("\(cx.myDice.diceArray[row].howMany)")
                 }
                 .labelsHidden()
-                Text("\(cx.dice[row].howMany) d")
+                Text("\(cx.myDice.diceArray[row].howMany) d")
                     .font(.system(size: 20))
-                TextField("Number of sides", text: cx.$customSidesTxt)
+                TextField("Number of sides", text: cx.$myDice.diceArray[row].sidesStr)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.decimalPad)
 
                 Spacer()
                 Button(action: {
-                    if let value = Int(cx.customSidesTxt) {
+                    if let value = Int(cx.myDice.diceArray[row].sidesStr) {
+                        cx.myDice.diceArray[row].sides = value
                         self.hideKeyboard()
-                        cx.dieIndex = row
-                        cx.dice[row].sides = value
-                        cx.calculateRoll(die: cx.dice[row])
+                        cx.dieIndex = row      // used by resultView
+                        cx.calculateRoll(die: cx.myDice.diceArray[row])
                         withAnimation(.linear(duration: 1.25)) {
                             cx.animationAmount += 640
                         }
                     }
-                    else { cx.customSidesTxt = ""
+                    else { cx.myDice.diceArray[row].sidesStr = ""
                         cx.rollMessage = "Please enter a valid number of sides."
                     }
                 }) {
@@ -119,6 +107,9 @@ struct ContentView: View {
                         .background(Color.yellow)
                         .cornerRadius(7)
                 }
+            }
+            .onAppear() {
+                print("Hello World")
             }
         }
     }
@@ -133,30 +124,12 @@ struct ContentView: View {
                         .font(.largeTitle)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .leading)
                 }
-                Image(cx.dice[cx.dieIndex].imageName)
+                Image(cx.myDice.diceArray[cx.dieIndex].imageName)
                     .rotation3DEffect(.degrees(cx.animationAmount), axis: (x: 0, y: 0, z: 1))
             }
         }
     }
 
-    struct ContentView_Previews: PreviewProvider {
-        static var previews: some View {
-            ContentView()
-        }
-    }
-
-// MARK: - Die
-    struct Die: Identifiable, Codable {
-        var id = UUID()
-        var sides: Int
-        var howMany = 1
-        var imageName: String
-        
-        func rollDie() -> Int {
-            let total = Int.random(in: 1...sides)
-            return total
-        }
-    }
     
     func calculateRoll(die: Die) {
         var total = 0;
@@ -176,6 +149,54 @@ struct ContentView: View {
     
 }
 
+
+// MARK: - Die and Dice
+struct Die: Identifiable, Codable {
+    var id = UUID()
+    var sides: Int
+    var sidesStr = ""   // used for TextField binding
+    var howMany = 1
+    var imageName: String
+    
+    func rollDie() -> Int {
+        let total = Int.random(in: 1...sides)
+        return total
+    }
+}
+
+// Collection of Dice with defaults plus save and restore from UserDefaults
+class Dice: ObservableObject {
+    @Published var diceArray: [Die] {
+        didSet {
+            let encoder = JSONEncoder()
+            if let encoded = try? encoder.encode(diceArray) {
+                UserDefaults.standard.set(encoded, forKey: "Dice")
+            }
+        }
+    }
+    
+    init() {
+        if let diceArray = UserDefaults.standard.data(forKey: "Dice") {
+            let decoder = JSONDecoder()
+            if let decoded = try? decoder.decode([Die].self, from: diceArray) {
+                self.diceArray = decoded
+                return
+            }
+        }
+
+        self.diceArray = [
+            Die(sides: 4, imageName: "dice4"),
+            Die(sides: 6, imageName: "dice6"),
+            Die(sides: 8, imageName: "dice8"),
+            Die(sides: 10, imageName: "dice10"),
+            Die(sides: 12, imageName: "dice12"),
+            Die(sides: 20, imageName: "dice20"),
+            //Die(sides: 100),
+            Die(sides: 17, imageName: "dice20"),     // last one has custom number of sides
+        ]
+    }
+}
+
 #if canImport(UIKit)
 extension View {
     func hideKeyboard() {
@@ -183,3 +204,10 @@ extension View {
     }
 }
 #endif
+
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
