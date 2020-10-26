@@ -17,7 +17,6 @@ struct ContentView: View {
     
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @State private var showingSheet = false
-
     
     var body: some View {
         
@@ -28,12 +27,11 @@ struct ContentView: View {
                         dieTableRow(cx: self, row:i)
                     }
                     customDieTableRow(cx: self, row:customDieOffset)
+                    resetView(cx: self)
                 }
-                
                 resultView(cx: self)
             }
-            .navigationBarTitle("DnD Roller")
-            .padding([.bottom], -1)
+            .navigationBarTitle("DnD Roller", displayMode: .inline)
         }
         
     }
@@ -116,23 +114,45 @@ struct ContentView: View {
                             JaeView()
                 }
             }
-            .onAppear() {
-                print("Hello World")
-            }
         }
     }
 
+    struct resetView: View {
+        var cx: ContentView
+        
+        var body: some View {
+            HStack {
+                Spacer()
+                Button("reset") {
+                    cx.myDice.diceArray = [
+                        Die(sides: 4, imageName: "dice4"),
+                        Die(sides: 6, imageName: "dice6"),
+                        Die(sides: 8, imageName: "dice8"),
+                        Die(sides: 10, imageName: "dice10"),
+                        Die(sides: 12, imageName: "dice12"),
+                        Die(sides: 20, imageName: "dice20"),
+                        Die(sides: 100, imageName: "dice_any"),     // last one has custom number of sides
+                    ]
+                    cx.myDice.diceArray[cx.customDieOffset].sidesStr = "100"
+                    cx.dieIndex = 1
+                    cx.rollMessage = ""
+                }
+            }
+        }
+    }
+    
     struct resultView: View {
         var cx: ContentView
         
         var body: some View {
             List {
                 Text(cx.rollMessage)
-                    .font(.largeTitle)
+                    .font(.system(size: 28))
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .leading)
                 
                 Image(cx.myDice.diceArray[cx.dieIndex].imageName)
-                    .frame(minWidth: 80, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .center)
+                    .scaleEffect(0.8)
+                    .frame(minWidth: 60, maxWidth: .infinity, minHeight: 60, maxHeight: .infinity, alignment: .center)
                     .rotation3DEffect(.degrees(cx.animationAmount), axis: (x: 0, y: 0, z: 1))
                 
             }
@@ -201,7 +221,7 @@ class Dice: ObservableObject {
             Die(sides: 12, imageName: "dice12"),
             Die(sides: 20, imageName: "dice20"),
             //Die(sides: 100),
-            Die(sides: 100, imageName: "dice20"),     // last one has custom number of sides
+            Die(sides: 100, imageName: "dice_any"),     // last one has custom number of sides
         ]
     }
 }
