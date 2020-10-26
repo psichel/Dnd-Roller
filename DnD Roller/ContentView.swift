@@ -10,25 +10,27 @@ import SwiftUI
 struct ContentView: View {
 
     @ObservedObject var myDice = Dice()
-    @State private var dieIndex = 0
+    @State private var dieIndex = 1
     @State private var rollMessage = ""
     @State private var customDieOffset = 6      // must be updated if array size changes
     @State private var animationAmount = 0.0
-    @Environment(\.verticalSizeClass) var sizeClass
+    
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @State private var showingSheet = false
+
     
     var body: some View {
         
         NavigationView {
-            Form {
-                Section {
+            VStack {
+                Form {
                     ForEach (0..<myDice.diceArray.count-1, id:\.self) { i in
                         dieTableRow(cx: self, row:i)
                     }
                     customDieTableRow(cx: self, row:customDieOffset)
                 }
-                Section {
-                    resultView(cx: self)
-                }
+                
+                resultView(cx: self)
             }
             .navigationBarTitle("DnD Roller")
             .padding([.bottom], -1)
@@ -90,6 +92,9 @@ struct ContentView: View {
                 Button(action: {
                     if let value = Int(cx.myDice.diceArray[row].sidesStr) {
                         cx.myDice.diceArray[row].sides = value
+                        if value == 402 {
+                            cx.showingSheet.toggle()
+                        }
                         self.hideKeyboard()
                         cx.dieIndex = row      // used by resultView
                         cx.calculateRoll(die: cx.myDice.diceArray[row])
@@ -107,6 +112,9 @@ struct ContentView: View {
                         .background(Color.yellow)
                         .cornerRadius(7)
                 }
+                .sheet(isPresented: cx.$showingSheet) {
+                            JaeView()
+                }
             }
             .onAppear() {
                 print("Hello World")
@@ -119,13 +127,14 @@ struct ContentView: View {
         
         var body: some View {
             List {
-                Section {
-                    Text(cx.rollMessage)
-                        .font(.largeTitle)
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .leading)
-                }
+                Text(cx.rollMessage)
+                    .font(.largeTitle)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .leading)
+                
                 Image(cx.myDice.diceArray[cx.dieIndex].imageName)
+                    .frame(minWidth: 80, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .center)
                     .rotation3DEffect(.degrees(cx.animationAmount), axis: (x: 0, y: 0, z: 1))
+                
             }
         }
     }
@@ -192,7 +201,7 @@ class Dice: ObservableObject {
             Die(sides: 12, imageName: "dice12"),
             Die(sides: 20, imageName: "dice20"),
             //Die(sides: 100),
-            Die(sides: 17, imageName: "dice20"),     // last one has custom number of sides
+            Die(sides: 100, imageName: "dice20"),     // last one has custom number of sides
         ]
     }
 }
