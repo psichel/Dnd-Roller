@@ -20,7 +20,7 @@ struct ContentView: View {
     
     var body: some View {
         
-        NavigationView {
+        //NavigationView {
             VStack {
                 Form {
                     ForEach (0..<myDice.diceArray.count-1, id:\.self) { i in
@@ -32,7 +32,7 @@ struct ContentView: View {
                 resultView(cx: self)
             }
             .navigationBarTitle("DnD Roller", displayMode: .inline)
-        }
+        //}
         
     }
 
