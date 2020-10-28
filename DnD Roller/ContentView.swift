@@ -16,24 +16,42 @@ struct ContentView: View {
     @State private var animationAmount = 0.0
     
     @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @State private var showingSheet = false
     
     var body: some View {
         
-        //NavigationView {
-            VStack {
-                Form {
-                    ForEach (0..<myDice.diceArray.count-1, id:\.self) { i in
-                        dieTableRow(cx: self, row:i)
+        NavigationView {
+            if verticalSizeClass == .regular {
+                VStack {
+                    Form {
+                        ForEach (0..<myDice.diceArray.count-1, id:\.self) { i in
+                            dieTableRow(cx: self, row:i)
+                        }
+                        customDieTableRow(cx: self, row:customDieOffset)
+                        resetView(cx: self)
                     }
-                    customDieTableRow(cx: self, row:customDieOffset)
-                    resetView(cx: self)
+                    resultView(cx: self)
                 }
-                resultView(cx: self)
+                .navigationBarTitle("DnD Roller", displayMode: .inline)
             }
-            .navigationBarTitle("DnD Roller", displayMode: .inline)
-        //}
-        
+            else {
+                HStack {
+                    Form {
+                        ForEach (0..<myDice.diceArray.count-1, id:\.self) { i in
+                            dieTableRow(cx: self, row:i)
+                        }
+                        customDieTableRow(cx: self, row:customDieOffset)
+                        resetView(cx: self)
+                    }
+                    resultView(cx: self)
+                }
+                .navigationBarTitle("DnD Roller", displayMode: .inline)
+            }
+            
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+
     }
 
 // MARK: - subviews
