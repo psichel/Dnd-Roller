@@ -9,10 +9,18 @@ import SwiftUI
 
 struct JaeView: View {
     @Environment(\.presentationMode) var presentationMode
+    let easterEggs = ["Crocnessmonster falls into lava yummy side up",
+                      "Authoritative sloth",
+                      "Penny & Ruby & Lollipop & Pikaya & Elska",
+                      "Toast for days",
+                      "Do it or don’t do it or do it",
+                      "The answer is: Twenty seven....and a half",
+                      "You have found the third dimple",
+                    ]
     
     var body: some View {
         VStack(spacing:50) {
-            Text("Jae is awesome")
+            Text(easterEggs.randomElement() ?? "Jae is awesome")
                 .font(.largeTitle)
                 .foregroundColor(.purple)
             Button("Dismiss") {

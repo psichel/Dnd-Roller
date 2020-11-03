@@ -12,6 +12,11 @@
 		D6C8DF152541D6FD00669E2B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C8DF142541D6FD00669E2B /* ContentView.swift */; };
 		D6C8DF172541D70300669E2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6C8DF162541D70300669E2B /* Assets.xcassets */; };
 		D6C8DF1A2541D70300669E2B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6C8DF192541D70300669E2B /* Preview Assets.xcassets */; };
+		D6CA6F8D2550B35A001E5CEA /* PlaySound.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CA6F8C2550B35A001E5CEA /* PlaySound.swift */; };
+		D6CA6F922550BFFD001E5CEA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6CA6F912550BFFD001E5CEA /* AVFoundation.framework */; };
+		D6CA6F972550C03D001E5CEA /* Success.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6CA6F942550C03D001E5CEA /* Success.mp3 */; };
+		D6CA6F982550C03D001E5CEA /* Roll.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6CA6F952550C03D001E5CEA /* Roll.mp3 */; };
+		D6CA6F992550C03D001E5CEA /* WahWah.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6CA6F962550C03D001E5CEA /* WahWah.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +27,11 @@
 		D6C8DF162541D70300669E2B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D6C8DF192541D70300669E2B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D6C8DF1B2541D70300669E2B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D6CA6F8C2550B35A001E5CEA /* PlaySound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaySound.swift; sourceTree = "<group>"; };
+		D6CA6F912550BFFD001E5CEA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		D6CA6F942550C03D001E5CEA /* Success.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Success.mp3; sourceTree = "<group>"; };
+		D6CA6F952550C03D001E5CEA /* Roll.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Roll.mp3; sourceTree = "<group>"; };
+		D6CA6F962550C03D001E5CEA /* WahWah.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = WahWah.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6CA6F922550BFFD001E5CEA /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +51,7 @@
 			children = (
 				D6C8DF112541D6FD00669E2B /* DnD Roller */,
 				D6C8DF102541D6FD00669E2B /* Products */,
+				D6CA6F902550BFFD001E5CEA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,9 +68,11 @@
 			children = (
 				D6C8DF122541D6FD00669E2B /* DnD_RollerApp.swift */,
 				D6C8DF142541D6FD00669E2B /* ContentView.swift */,
+				D6CA6F8C2550B35A001E5CEA /* PlaySound.swift */,
 				D612D0BF25473C6900EEE9D7 /* JaeView.swift */,
 				D6C8DF162541D70300669E2B /* Assets.xcassets */,
 				D6C8DF1B2541D70300669E2B /* Info.plist */,
+				D6CA6F932550C03D001E5CEA /* Sounds */,
 				D6C8DF182541D70300669E2B /* Preview Content */,
 			);
 			path = "DnD Roller";
@@ -71,6 +85,24 @@
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
+		};
+		D6CA6F902550BFFD001E5CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D6CA6F912550BFFD001E5CEA /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D6CA6F932550C03D001E5CEA /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				D6CA6F942550C03D001E5CEA /* Success.mp3 */,
+				D6CA6F952550C03D001E5CEA /* Roll.mp3 */,
+				D6CA6F962550C03D001E5CEA /* WahWah.mp3 */,
+			);
+			path = Sounds;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -131,7 +163,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6C8DF1A2541D70300669E2B /* Preview Assets.xcassets in Resources */,
+				D6CA6F972550C03D001E5CEA /* Success.mp3 in Resources */,
+				D6CA6F992550C03D001E5CEA /* WahWah.mp3 in Resources */,
 				D6C8DF172541D70300669E2B /* Assets.xcassets in Resources */,
+				D6CA6F982550C03D001E5CEA /* Roll.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +199,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6C8DF152541D6FD00669E2B /* ContentView.swift in Sources */,
+				D6CA6F8D2550B35A001E5CEA /* PlaySound.swift in Sources */,
 				D6C8DF132541D6FD00669E2B /* DnD_RollerApp.swift in Sources */,
 				D612D0C025473C6900EEE9D7 /* JaeView.swift in Sources */,
 			);

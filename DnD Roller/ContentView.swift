@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+let myAudio = MyAudio()
+
 struct ContentView: View {
 
     @ObservedObject var myDice = Dice()
@@ -24,7 +26,7 @@ struct ContentView: View {
         NavigationView {
             if verticalSizeClass == .regular {
                 VStack {
-                    Form {
+                    List {
                         ForEach (0..<myDice.diceArray.count-1, id:\.self) { i in
                             dieTableRow(cx: self, row:i)
                         }
@@ -78,9 +80,10 @@ struct ContentView: View {
                                 
                 }) {
                     Text("Roll")
+                        .frame(width: 60, height: nil)
                         .padding(4)
-                        .foregroundColor(Color(.label))
-                        .background(Color.yellow)
+                        .foregroundColor(Color.white)
+                        .background(Color("diceBackground"))
                         .cornerRadius(7)
                 }
             }
@@ -100,13 +103,19 @@ struct ContentView: View {
                 .labelsHidden()
                 Text("\(cx.myDice.diceArray[row].howMany) d")
                     .font(.system(size: 20))
-                TextField("Number of sides", text: cx.$myDice.diceArray[row].sidesStr)
+                TextField("#", text: cx.$myDice.diceArray[row].sidesStr)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.decimalPad)
+                    .frame(width: 56, height: nil)
 
                 Spacer()
                 Button(action: {
                     if let value = Int(cx.myDice.diceArray[row].sidesStr) {
+                        if value < 1 {
+                            cx.myDice.diceArray[row].sidesStr = ""
+                            cx.rollMessage = "Please enter a valid number of sides."
+                            return
+                        }
                         cx.myDice.diceArray[row].sides = value
                         if value == 402 {
                             cx.showingSheet.toggle()
@@ -123,9 +132,10 @@ struct ContentView: View {
                     }
                 }) {
                     Text("Roll")
+                        .frame(width: 60, height: nil)
                         .padding(4)
-                        .foregroundColor(Color(.label))
-                        .background(Color.yellow)
+                        .foregroundColor(Color.white)
+                        .background(Color("diceBackground"))
                         .cornerRadius(7)
                 }
                 .sheet(isPresented: cx.$showingSheet) {
@@ -165,14 +175,17 @@ struct ContentView: View {
         var body: some View {
             List {
                 Text(cx.rollMessage)
-                    .font(.system(size: 28))
+                    .font(.system(size: 30))
+                    .foregroundColor(.white)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .leading)
-                
+                    .padding()
+                    .background(Color("diceBackground"))
+                    .cornerRadius(10)
                 Image(cx.myDice.diceArray[cx.dieIndex].imageName)
                     .scaleEffect(0.8)
                     .frame(minWidth: 60, maxWidth: .infinity, minHeight: 60, maxHeight: .infinity, alignment: .center)
                     .rotation3DEffect(.degrees(cx.animationAmount), axis: (x: 0, y: 0, z: 1))
-                
+
             }
         }
     }
@@ -191,7 +204,22 @@ struct ContentView: View {
                 rollMessage += " + \(value)"
             }
         }
-        if (die.howMany > 1) { rollMessage += " = \(total)" }
+        if die.howMany > 1 { rollMessage += " = \(total)" }
+        
+        if die.howMany == 1 && die.sides == 20 {
+            if total == 1 {
+                myAudio.playSound(name: "WahWah")
+            }
+            else if total == die.sides {
+                myAudio.playSound(name: "Success")
+            }
+            else {
+                myAudio.playSound(name: "Roll")
+            }
+        }
+        else {
+            myAudio.playSound(name: "Roll")
+        }
     }
     
 }
