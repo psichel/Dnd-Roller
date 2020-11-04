@@ -19,7 +19,8 @@ struct ContentView: View {
     
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @State private var showingSheet = false
+    @State private var showingJaeSheet = false
+    @State private var showingCreditsSheet = false
     
     var body: some View {
         
@@ -29,10 +30,12 @@ struct ContentView: View {
                     List {
                         ForEach (0..<myDice.diceArray.count-1, id:\.self) { i in
                             dieTableRow(cx: self, row:i)
+                                .frame(height: 30)
                         }
                         customDieTableRow(cx: self, row:customDieOffset)
                         resetView(cx: self)
                     }
+                    .environment(\.defaultMinListRowHeight, 10)
                     resultView(cx: self)
                 }
                 .navigationBarTitle("DnD Roller", displayMode: .inline)
@@ -106,29 +109,41 @@ struct ContentView: View {
                 TextField("#", text: cx.$myDice.diceArray[row].sidesStr)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.decimalPad)
-                    .frame(width: 56, height: nil)
-
+                    .frame(width: 60, height: nil)
+                    .sheet(isPresented: cx.$showingCreditsSheet) {
+                                CreditsView()
+                    }
                 Spacer()
                 Button(action: {
-                    if let value = Int(cx.myDice.diceArray[row].sidesStr) {
-                        if value < 1 {
-                            cx.myDice.diceArray[row].sidesStr = ""
-                            cx.rollMessage = "Please enter a valid number of sides."
-                            return
-                        }
-                        cx.myDice.diceArray[row].sides = value
-                        if value == 402 {
-                            cx.showingSheet.toggle()
-                        }
-                        self.hideKeyboard()
-                        cx.dieIndex = row      // used by resultView
-                        cx.calculateRoll(die: cx.myDice.diceArray[row])
-                        withAnimation(.linear(duration: 1.25)) {
-                            cx.animationAmount += 640
-                        }
+                    self.hideKeyboard()
+                    let strValue = cx.myDice.diceArray[row].sidesStr
+                    switch (strValue) {
+                    case "0402":
+                        cx.showingJaeSheet.toggle()
+                        return
+                    case "00":
+                        cx.showingCreditsSheet.toggle()
+                        return
+                    case "01":
+                        myAudio.playSound(name: "WahWah")
+                        return
+                    case "02":
+                        myAudio.playSound(name: "Success")
+                        return
+                    default: break
                     }
-                    else { cx.myDice.diceArray[row].sidesStr = ""
+                    guard let value = Int(strValue),
+                              value >= 1
+                    else {
+                        cx.myDice.diceArray[row].sidesStr = ""
                         cx.rollMessage = "Please enter a valid number of sides."
+                        return
+                    }
+                    cx.myDice.diceArray[row].sides = value
+                    cx.dieIndex = row      // used by resultView
+                    cx.calculateRoll(die: cx.myDice.diceArray[row])
+                    withAnimation(.linear(duration: 1.25)) {
+                        cx.animationAmount += 640
                     }
                 }) {
                     Text("Roll")
@@ -138,7 +153,7 @@ struct ContentView: View {
                         .background(Color("diceBackground"))
                         .cornerRadius(7)
                 }
-                .sheet(isPresented: cx.$showingSheet) {
+                .sheet(isPresented: cx.$showingJaeSheet) {
                             JaeView()
                 }
             }
@@ -152,15 +167,7 @@ struct ContentView: View {
             HStack {
                 Spacer()
                 Button("reset") {
-                    cx.myDice.diceArray = [
-                        Die(sides: 4, imageName: "dice4"),
-                        Die(sides: 6, imageName: "dice6"),
-                        Die(sides: 8, imageName: "dice8"),
-                        Die(sides: 10, imageName: "dice10"),
-                        Die(sides: 12, imageName: "dice12"),
-                        Die(sides: 20, imageName: "dice20"),
-                        Die(sides: 100, imageName: "dice_any"),     // last one has custom number of sides
-                    ]
+                    cx.myDice.diceArray = Dice.defaultDice
                     cx.myDice.diceArray[cx.customDieOffset].sidesStr = "100"
                     cx.dieIndex = 1
                     cx.rollMessage = ""
@@ -175,14 +182,15 @@ struct ContentView: View {
         var body: some View {
             List {
                 Text(cx.rollMessage)
-                    .font(.system(size: 30))
+                    .font(.system(size: 24, weight: .bold, design: .default))
                     .foregroundColor(.white)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .leading)
-                    .padding()
+                    .padding(.horizontal)
                     .background(Color("diceBackground"))
                     .cornerRadius(10)
                 Image(cx.myDice.diceArray[cx.dieIndex].imageName)
-                    .scaleEffect(0.8)
+                    .padding(.vertical, -30)
+                    .scaleEffect(cx.myDice.diceArray[cx.dieIndex].imageScale)
                     .frame(minWidth: 60, maxWidth: .infinity, minHeight: 60, maxHeight: .infinity, alignment: .center)
                     .rotation3DEffect(.degrees(cx.animationAmount), axis: (x: 0, y: 0, z: 1))
 
@@ -232,6 +240,7 @@ struct Die: Identifiable, Codable {
     var sidesStr = ""   // used for TextField binding
     var howMany = 1
     var imageName: String
+    var imageScale: CGSize
     
     func rollDie() -> Int {
         let total = Int.random(in: 1...sides)
@@ -241,6 +250,17 @@ struct Die: Identifiable, Codable {
 
 // Collection of Dice with defaults plus save and restore from UserDefaults
 class Dice: ObservableObject {
+    static let defaultDice = [
+        Die(sides: 4, imageName: "dice4", imageScale: CGSize(width: 0.55, height: 0.55)),
+        Die(sides: 6, imageName: "dice6", imageScale: CGSize(width: 0.55, height: 0.55)),
+        Die(sides: 8, imageName: "dice8", imageScale: CGSize(width: 0.6, height: 0.6)),
+        Die(sides: 10, imageName: "dice10", imageScale: CGSize(width: 0.6, height: 0.6)),
+        Die(sides: 12, imageName: "dice12", imageScale: CGSize(width: 0.55, height: 0.55)),
+        Die(sides: 20, imageName: "dice20", imageScale: CGSize(width: 0.65, height: 0.65)),
+        //Die(sides: 100),
+        Die(sides: 100, imageName: "dice_any", imageScale: CGSize(width: 0.55, height: 0.55)),     // last one has custom number of sides
+    ]
+    
     @Published var diceArray: [Die] {
         didSet {
             let encoder = JSONEncoder()
@@ -258,17 +278,8 @@ class Dice: ObservableObject {
                 return
             }
         }
-
-        self.diceArray = [
-            Die(sides: 4, imageName: "dice4"),
-            Die(sides: 6, imageName: "dice6"),
-            Die(sides: 8, imageName: "dice8"),
-            Die(sides: 10, imageName: "dice10"),
-            Die(sides: 12, imageName: "dice12"),
-            Die(sides: 20, imageName: "dice20"),
-            //Die(sides: 100),
-            Die(sides: 100, imageName: "dice_any"),     // last one has custom number of sides
-        ]
+        diceArray = Dice.defaultDice
+        diceArray[diceArray.count-1].sidesStr = "100"
     }
 }
 

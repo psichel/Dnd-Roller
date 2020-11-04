@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,9 @@
 		D6CA6F972550C03D001E5CEA /* Success.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6CA6F942550C03D001E5CEA /* Success.mp3 */; };
 		D6CA6F982550C03D001E5CEA /* Roll.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6CA6F952550C03D001E5CEA /* Roll.mp3 */; };
 		D6CA6F992550C03D001E5CEA /* WahWah.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D6CA6F962550C03D001E5CEA /* WahWah.mp3 */; };
+		D6CA6F9D2551B4C3001E5CEA /* Credits.md in Resources */ = {isa = PBXBuildFile; fileRef = D6CA6F9C2551B4C3001E5CEA /* Credits.md */; };
+		D6CA6FA12551B561001E5CEA /* MDText in Frameworks */ = {isa = PBXBuildFile; productRef = D6CA6FA02551B561001E5CEA /* MDText */; };
+		D6CA6FA4255211CC001E5CEA /* CreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CA6FA3255211CC001E5CEA /* CreditsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,8 @@
 		D6CA6F942550C03D001E5CEA /* Success.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Success.mp3; sourceTree = "<group>"; };
 		D6CA6F952550C03D001E5CEA /* Roll.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Roll.mp3; sourceTree = "<group>"; };
 		D6CA6F962550C03D001E5CEA /* WahWah.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = WahWah.mp3; sourceTree = "<group>"; };
+		D6CA6F9C2551B4C3001E5CEA /* Credits.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Credits.md; sourceTree = SOURCE_ROOT; };
+		D6CA6FA3255211CC001E5CEA /* CreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6CA6FA12551B561001E5CEA /* MDText in Frameworks */,
 				D6CA6F922550BFFD001E5CEA /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -70,8 +76,10 @@
 				D6C8DF142541D6FD00669E2B /* ContentView.swift */,
 				D6CA6F8C2550B35A001E5CEA /* PlaySound.swift */,
 				D612D0BF25473C6900EEE9D7 /* JaeView.swift */,
+				D6CA6FA3255211CC001E5CEA /* CreditsView.swift */,
 				D6C8DF162541D70300669E2B /* Assets.xcassets */,
 				D6C8DF1B2541D70300669E2B /* Info.plist */,
+				D6CA6F9C2551B4C3001E5CEA /* Credits.md */,
 				D6CA6F932550C03D001E5CEA /* Sounds */,
 				D6C8DF182541D70300669E2B /* Preview Content */,
 			);
@@ -121,6 +129,9 @@
 			dependencies = (
 			);
 			name = "DnD Roller";
+			packageProductDependencies = (
+				D6CA6FA02551B561001E5CEA /* MDText */,
+			);
 			productName = "DnD Roller";
 			productReference = D6C8DF0F2541D6FD00669E2B /* DnD Roller.app */;
 			productType = "com.apple.product-type.application";
@@ -148,6 +159,9 @@
 				Base,
 			);
 			mainGroup = D6C8DF062541D6FD00669E2B;
+			packageReferences = (
+				D6CA6F9F2551B561001E5CEA /* XCRemoteSwiftPackageReference "MDText" */,
+			);
 			productRefGroup = D6C8DF102541D6FD00669E2B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -165,6 +179,7 @@
 				D6C8DF1A2541D70300669E2B /* Preview Assets.xcassets in Resources */,
 				D6CA6F972550C03D001E5CEA /* Success.mp3 in Resources */,
 				D6CA6F992550C03D001E5CEA /* WahWah.mp3 in Resources */,
+				D6CA6F9D2551B4C3001E5CEA /* Credits.md in Resources */,
 				D6C8DF172541D70300669E2B /* Assets.xcassets in Resources */,
 				D6CA6F982550C03D001E5CEA /* Roll.mp3 in Resources */,
 			);
@@ -201,6 +216,7 @@
 				D6C8DF152541D6FD00669E2B /* ContentView.swift in Sources */,
 				D6CA6F8D2550B35A001E5CEA /* PlaySound.swift in Sources */,
 				D6C8DF132541D6FD00669E2B /* DnD_RollerApp.swift in Sources */,
+				D6CA6FA4255211CC001E5CEA /* CreditsView.swift in Sources */,
 				D612D0C025473C6900EEE9D7 /* JaeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,6 +406,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D6CA6F9F2551B561001E5CEA /* XCRemoteSwiftPackageReference "MDText" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Lambdo-Labs/MDText";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.10;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D6CA6FA02551B561001E5CEA /* MDText */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6CA6F9F2551B561001E5CEA /* XCRemoteSwiftPackageReference "MDText" */;
+			productName = MDText;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D6C8DF072541D6FD00669E2B /* Project object */;
 }

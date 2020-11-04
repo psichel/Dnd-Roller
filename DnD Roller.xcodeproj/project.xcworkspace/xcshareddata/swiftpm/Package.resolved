@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "MDText",
+        "repositoryURL": "https://github.com/Lambdo-Labs/MDText",
+        "state": {
+          "branch": null,
+          "revision": "7b1f74239e4b41799a36b404ff30e21fca6fb9d7",
+          "version": "0.0.10"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
