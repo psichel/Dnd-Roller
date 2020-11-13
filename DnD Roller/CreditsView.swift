@@ -18,10 +18,6 @@ struct CreditsView: View {
             MDText(markdown: markdownText)
                 .padding()
         }
-        
-        Button("Dismiss") {
-            self.presentationMode.wrappedValue.dismiss()
-        }
         .onAppear {
             getCreditsText()
         }

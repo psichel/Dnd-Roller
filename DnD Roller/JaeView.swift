@@ -27,6 +27,7 @@ struct JaeView: View {
                 self.presentationMode.wrappedValue.dismiss()
             }
         }
+        .padding()
     }
 }
 

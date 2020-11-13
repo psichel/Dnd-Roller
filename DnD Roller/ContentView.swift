@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-
     @ObservedObject var myDice = Dice()
     @State private var dieIndex = 1
     @State private var customDieOffset = 6      // must be updated if array size changes
@@ -17,7 +16,6 @@ struct ContentView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @State private var showingJaeSheet = false
-    @State private var showingCreditsSheet = false
     
     var body: some View {
         
@@ -27,17 +25,16 @@ struct ContentView: View {
                     List {
                         ForEach (0..<myDice.diceArray.count-1, id:\.self) { i in
                             dieTableRow(cx: self, row:i)
-                                .frame(height: 30)
+                                //.frame(height: 30)
                         }
                         customDieTableRow(cx: self, row:customDieOffset)
-                        resetView(cx: self)
                     }
                     .environment(\.defaultMinListRowHeight, 10)
                     resultView(cx: self)
                 }
                 .navigationBarTitle("DnD Roller", displayMode: .inline)
                 .navigationBarItems(trailing:
-                    NavigationLink(destination: SettingsView()) {
+                                        NavigationLink(destination: SettingsView(cx: self)) {
                         Image(systemName: "staroflife.fill")
                             .foregroundColor(Color("diceBackground"))
                     }
@@ -50,13 +47,12 @@ struct ContentView: View {
                             dieTableRow(cx: self, row:i)
                         }
                         customDieTableRow(cx: self, row:customDieOffset)
-                        resetView(cx: self)
                     }
                     resultView(cx: self)
                 }
                 .navigationBarTitle("DnD Roller", displayMode: .inline)
                 .navigationBarItems(trailing:
-                    NavigationLink(destination: SettingsView()) {
+                                        NavigationLink(destination: SettingsView(cx: self)) {
                         Image(systemName: "staroflife.fill")
                             .foregroundColor(Color("diceBackground"))
                     }
@@ -84,7 +80,7 @@ struct ContentView: View {
                 Button(action: {
                     self.hideKeyboard()
                     cx.dieIndex = row   // used by resultView
-                    cx.myDice.calculateRoll(die: cx.myDice.diceArray[row])
+                    cx.myDice.calculateRoll(die: &cx.myDice.diceArray[row])
                     cx.animationAmount += 640
                 }) {
                     Text("Roll")
@@ -115,9 +111,6 @@ struct ContentView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.decimalPad)
                     .frame(width: 60, height: nil)
-                    .sheet(isPresented: cx.$showingCreditsSheet) {
-                                CreditsView()
-                    }
                 Spacer()
                 Button(action: {
                     self.hideKeyboard()
@@ -125,9 +118,6 @@ struct ContentView: View {
                     switch (strValue) {
                     case "0402":
                         cx.showingJaeSheet.toggle()
-                        return
-                    case "00":
-                        cx.showingCreditsSheet.toggle()
                         return
                     case "01":
                         myAudio.playSound(name: "WahWah")
@@ -146,7 +136,7 @@ struct ContentView: View {
                     }
                     cx.myDice.diceArray[row].sides = value
                     cx.dieIndex = row      // used by resultView
-                    cx.myDice.calculateRoll(die: cx.myDice.diceArray[row])
+                    cx.myDice.calculateRoll(die: &cx.myDice.diceArray[row])
                     cx.animationAmount += 640
                 }) {
                     Text("Roll")
@@ -162,21 +152,12 @@ struct ContentView: View {
             }
         }
     }
-
-    struct resetView: View {
-        var cx: ContentView
-        
-        var body: some View {
-            HStack {
-                Spacer()
-                Button("reset") {
-                    cx.myDice.diceArray = Dice.defaultDice
-                    cx.myDice.diceArray[cx.customDieOffset].sidesStr = "100"
-                    cx.dieIndex = 1
-                    cx.myDice.rollMessage = ""
-                }
-            }
-        }
+    
+    func resetDice() {
+        myDice.diceArray = Dice.defaultDice
+        myDice.diceArray[customDieOffset].sidesStr = "100"
+        dieIndex = 1
+        myDice.rollMessage = ""
     }
     
     struct resultView: View {
@@ -197,7 +178,7 @@ struct ContentView: View {
                     .animation(enableAnimation ? Animation.linear(duration: 1.25) : Animation.linear(duration: 0.0))
                     .scaleEffect(cx.myDice.diceArray[cx.dieIndex].imageScale)
                     .frame(minWidth: 60, maxWidth: .infinity, minHeight: 60, maxHeight: .infinity, alignment: .center)
-                    .padding(.vertical, -30)
+                    //.padding(.vertical, -30)
             }
         }
     }

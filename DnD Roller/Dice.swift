@@ -17,9 +17,19 @@ struct Die: Identifiable, Codable {
     var howMany = 1
     var imageName: String
     var imageScale: CGSize
+    var history = [Int]()
+    var average: String {
+        get {
+            //history.count > 0 ? "\( Double(history.reduce(0, +)) / Double(history.count) )" : ""
+            history.count > 0 ? String( format: "%.1f", Double(history.reduce(0, +)) / Double(history.count) ) : ""
+        }
+    }
     
-    func rollDie() -> Int {
+    mutating func rollDie() -> Int {
         let total = Int.random(in: 1...sides)
+        history.append(total)
+        let arraySlice = history.prefix(20)
+        history = Array(arraySlice)
         return total
     }
 }
@@ -59,7 +69,7 @@ class Dice: ObservableObject {
         diceArray[diceArray.count-1].sidesStr = "100"
     }
     
-    func calculateRoll(die: Die) {
+    func calculateRoll( die: inout Die) {
         var total = 0;
         rollMessage = "Roll \(die.howMany) d\(die.sides)\n"
         for i in 0..<die.howMany {
