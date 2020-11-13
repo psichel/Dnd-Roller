@@ -7,13 +7,10 @@
 
 import SwiftUI
 
-let myAudio = MyAudio()
-
 struct ContentView: View {
 
     @ObservedObject var myDice = Dice()
     @State private var dieIndex = 1
-    @State private var rollMessage = ""
     @State private var customDieOffset = 6      // must be updated if array size changes
     @State private var animationAmount = 0.0
     
@@ -39,6 +36,12 @@ struct ContentView: View {
                     resultView(cx: self)
                 }
                 .navigationBarTitle("DnD Roller", displayMode: .inline)
+                .navigationBarItems(trailing:
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "staroflife.fill")
+                            .foregroundColor(Color("diceBackground"))
+                    }
+                )
             }
             else {
                 HStack {
@@ -52,8 +55,13 @@ struct ContentView: View {
                     resultView(cx: self)
                 }
                 .navigationBarTitle("DnD Roller", displayMode: .inline)
+                .navigationBarItems(trailing:
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "staroflife.fill")
+                            .foregroundColor(Color("diceBackground"))
+                    }
+                )
             }
-            
         }
         .navigationViewStyle(StackNavigationViewStyle())
 
@@ -76,11 +84,8 @@ struct ContentView: View {
                 Button(action: {
                     self.hideKeyboard()
                     cx.dieIndex = row   // used by resultView
-                    cx.calculateRoll(die: cx.myDice.diceArray[row])
-                    withAnimation(.linear(duration: 1.25)) {
-                        cx.animationAmount += 640
-                    }
-                                
+                    cx.myDice.calculateRoll(die: cx.myDice.diceArray[row])
+                    cx.animationAmount += 640
                 }) {
                     Text("Roll")
                         .frame(width: 60, height: nil)
@@ -136,15 +141,13 @@ struct ContentView: View {
                               value >= 1
                     else {
                         cx.myDice.diceArray[row].sidesStr = ""
-                        cx.rollMessage = "Please enter a valid number of sides."
+                        cx.myDice.rollMessage = "Please enter a valid number of sides."
                         return
                     }
                     cx.myDice.diceArray[row].sides = value
                     cx.dieIndex = row      // used by resultView
-                    cx.calculateRoll(die: cx.myDice.diceArray[row])
-                    withAnimation(.linear(duration: 1.25)) {
-                        cx.animationAmount += 640
-                    }
+                    cx.myDice.calculateRoll(die: cx.myDice.diceArray[row])
+                    cx.animationAmount += 640
                 }) {
                     Text("Roll")
                         .frame(width: 60, height: nil)
@@ -170,7 +173,7 @@ struct ContentView: View {
                     cx.myDice.diceArray = Dice.defaultDice
                     cx.myDice.diceArray[cx.customDieOffset].sidesStr = "100"
                     cx.dieIndex = 1
-                    cx.rollMessage = ""
+                    cx.myDice.rollMessage = ""
                 }
             }
         }
@@ -178,10 +181,11 @@ struct ContentView: View {
     
     struct resultView: View {
         var cx: ContentView
+        let enableAnimation = UserDefaults.standard.bool(forKey: "enableAnimation")
         
         var body: some View {
             List {
-                Text(cx.rollMessage)
+                Text(cx.myDice.rollMessage)
                     .font(.system(size: 24, weight: .bold, design: .default))
                     .foregroundColor(.white)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, maxHeight: .infinity, alignment: .leading)
@@ -189,99 +193,16 @@ struct ContentView: View {
                     .background(Color("diceBackground"))
                     .cornerRadius(10)
                 Image(cx.myDice.diceArray[cx.dieIndex].imageName)
-                    .padding(.vertical, -30)
+                    .rotationEffect(.degrees(cx.animationAmount))
+                    .animation(enableAnimation ? Animation.linear(duration: 1.25) : Animation.linear(duration: 0.0))
                     .scaleEffect(cx.myDice.diceArray[cx.dieIndex].imageScale)
                     .frame(minWidth: 60, maxWidth: .infinity, minHeight: 60, maxHeight: .infinity, alignment: .center)
-                    .rotation3DEffect(.degrees(cx.animationAmount), axis: (x: 0, y: 0, z: 1))
-
+                    .padding(.vertical, -30)
             }
         }
-    }
-
-    
-    func calculateRoll(die: Die) {
-        var total = 0;
-        self.rollMessage = "Roll \(die.howMany) d\(die.sides)\n"
-        for i in 0..<die.howMany {
-            let value = die.rollDie()
-            total += value
-            if (i == 0) {
-                rollMessage += "\(value)"
-            }
-            else {
-                rollMessage += " + \(value)"
-            }
-        }
-        if die.howMany > 1 { rollMessage += " = \(total)" }
-        
-        if die.howMany == 1 && die.sides == 20 {
-            if total == 1 {
-                myAudio.playSound(name: "WahWah")
-            }
-            else if total == die.sides {
-                myAudio.playSound(name: "Success")
-            }
-            else {
-                myAudio.playSound(name: "Roll")
-            }
-        }
-        else {
-            myAudio.playSound(name: "Roll")
-        }
-    }
-    
-}
-
-
-// MARK: - Die and Dice
-struct Die: Identifiable, Codable {
-    var id = UUID()
-    var sides: Int
-    var sidesStr = ""   // used for TextField binding
-    var howMany = 1
-    var imageName: String
-    var imageScale: CGSize
-    
-    func rollDie() -> Int {
-        let total = Int.random(in: 1...sides)
-        return total
     }
 }
 
-// Collection of Dice with defaults plus save and restore from UserDefaults
-class Dice: ObservableObject {
-    static let defaultDice = [
-        Die(sides: 4, imageName: "dice4", imageScale: CGSize(width: 0.55, height: 0.55)),
-        Die(sides: 6, imageName: "dice6", imageScale: CGSize(width: 0.55, height: 0.55)),
-        Die(sides: 8, imageName: "dice8", imageScale: CGSize(width: 0.6, height: 0.6)),
-        Die(sides: 10, imageName: "dice10", imageScale: CGSize(width: 0.6, height: 0.6)),
-        Die(sides: 12, imageName: "dice12", imageScale: CGSize(width: 0.55, height: 0.55)),
-        Die(sides: 20, imageName: "dice20", imageScale: CGSize(width: 0.65, height: 0.65)),
-        //Die(sides: 100),
-        Die(sides: 100, imageName: "dice_any", imageScale: CGSize(width: 0.55, height: 0.55)),     // last one has custom number of sides
-    ]
-    
-    @Published var diceArray: [Die] {
-        didSet {
-            let encoder = JSONEncoder()
-            if let encoded = try? encoder.encode(diceArray) {
-                UserDefaults.standard.set(encoded, forKey: "Dice")
-            }
-        }
-    }
-    
-    init() {
-        if let diceArray = UserDefaults.standard.data(forKey: "Dice") {
-            let decoder = JSONDecoder()
-            if let decoded = try? decoder.decode([Die].self, from: diceArray) {
-                self.diceArray = decoded
-                return
-            }
-        }
-        diceArray = Dice.defaultDice
-        diceArray[diceArray.count-1].sidesStr = "100"
-    }
-}
 
 #if canImport(UIKit)
 extension View {

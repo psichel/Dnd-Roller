@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D612D0C025473C6900EEE9D7 /* JaeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D612D0BF25473C6900EEE9D7 /* JaeView.swift */; };
+		D6990D22255DF962001C16E8 /* Dice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6990D21255DF962001C16E8 /* Dice.swift */; };
+		D6990D25255E0E83001C16E8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6990D24255E0E83001C16E8 /* SettingsView.swift */; };
 		D6C8DF132541D6FD00669E2B /* DnD_RollerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C8DF122541D6FD00669E2B /* DnD_RollerApp.swift */; };
 		D6C8DF152541D6FD00669E2B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C8DF142541D6FD00669E2B /* ContentView.swift */; };
 		D6C8DF172541D70300669E2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6C8DF162541D70300669E2B /* Assets.xcassets */; };
@@ -24,6 +26,8 @@
 
 /* Begin PBXFileReference section */
 		D612D0BF25473C6900EEE9D7 /* JaeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JaeView.swift; sourceTree = "<group>"; };
+		D6990D21255DF962001C16E8 /* Dice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dice.swift; sourceTree = "<group>"; };
+		D6990D24255E0E83001C16E8 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D6C8DF0F2541D6FD00669E2B /* DnD Roller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DnD Roller.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6C8DF122541D6FD00669E2B /* DnD_RollerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnD_RollerApp.swift; sourceTree = "<group>"; };
 		D6C8DF142541D6FD00669E2B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -74,9 +78,11 @@
 			children = (
 				D6C8DF122541D6FD00669E2B /* DnD_RollerApp.swift */,
 				D6C8DF142541D6FD00669E2B /* ContentView.swift */,
+				D6990D21255DF962001C16E8 /* Dice.swift */,
 				D6CA6F8C2550B35A001E5CEA /* PlaySound.swift */,
 				D612D0BF25473C6900EEE9D7 /* JaeView.swift */,
 				D6CA6FA3255211CC001E5CEA /* CreditsView.swift */,
+				D6990D24255E0E83001C16E8 /* SettingsView.swift */,
 				D6C8DF162541D70300669E2B /* Assets.xcassets */,
 				D6C8DF1B2541D70300669E2B /* Info.plist */,
 				D6CA6F9C2551B4C3001E5CEA /* Credits.md */,
@@ -213,10 +219,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6990D25255E0E83001C16E8 /* SettingsView.swift in Sources */,
 				D6C8DF152541D6FD00669E2B /* ContentView.swift in Sources */,
 				D6CA6F8D2550B35A001E5CEA /* PlaySound.swift in Sources */,
 				D6C8DF132541D6FD00669E2B /* DnD_RollerApp.swift in Sources */,
 				D6CA6FA4255211CC001E5CEA /* CreditsView.swift in Sources */,
+				D6990D22255DF962001C16E8 /* Dice.swift in Sources */,
 				D612D0C025473C6900EEE9D7 /* JaeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
