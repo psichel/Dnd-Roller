@@ -12,7 +12,6 @@ struct SettingsView: View {
     
     @AppStorage("enableSound") private var enableSound = true
     @AppStorage("enableAnimation") private var enableAnimation = true
-    @AppStorage("enableDarkMode") private var enableDarkMode = false
     
     var body: some View {
         Form {
@@ -26,13 +25,13 @@ struct SettingsView: View {
                     Text("Credits")
                 }
             }
-            Section(header: Text("Stats (average)")) {
+            Section(header: Text("Average over last 10 rolls")) {
                 ForEach (0..<cx.myDice.diceArray.count-1, id:\.self) { row in
                     HStack {
                         Text("d\(cx.myDice.diceArray[row].sides)")
                                         .font(.system(size: 20))
                         Spacer()
-                        Text(cx.myDice.diceArray[row].average)
+                        Text(cx.myDice.diceArray[row].diceStats.average)
                     }
                 }
                 Text("d\(cx.myDice.diceArray[cx.myDice.diceArray.count-1].sides)")

@@ -34,9 +34,9 @@ struct ContentView: View {
                 }
                 .navigationBarTitle("DnD Roller", displayMode: .inline)
                 .navigationBarItems(trailing:
-                                        NavigationLink(destination: SettingsView(cx: self)) {
-                        Image(systemName: "staroflife.fill")
-                            .foregroundColor(Color("diceBackground"))
+                    NavigationLink(destination: SettingsView(cx: self)) {
+                        Text("Settings")
+                            //.foregroundColor(Color("diceBackground"))
                     }
                 )
             }
@@ -52,15 +52,22 @@ struct ContentView: View {
                 }
                 .navigationBarTitle("DnD Roller", displayMode: .inline)
                 .navigationBarItems(trailing:
-                                        NavigationLink(destination: SettingsView(cx: self)) {
-                        Image(systemName: "staroflife.fill")
+                    NavigationLink(destination: SettingsView(cx: self)) {
+                        Text("Settings")
                             .foregroundColor(Color("diceBackground"))
                     }
                 )
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-
+        .onAppear() {
+            let initialized = UserDefaults.standard.bool(forKey: "initialized")
+            if !initialized {
+                UserDefaults.standard.set(true, forKey: "initialized")
+                UserDefaults.standard.set(true, forKey: "enableSound")
+                UserDefaults.standard.set(true, forKey: "enableAnimation")
+            }
+        }
     }
 
 // MARK: - subviews
@@ -80,7 +87,7 @@ struct ContentView: View {
                 Button(action: {
                     self.hideKeyboard()
                     cx.dieIndex = row   // used by resultView
-                    cx.myDice.calculateRoll(die: &cx.myDice.diceArray[row])
+                    cx.myDice.calculateRoll(die: cx.myDice.diceArray[row])
                     cx.animationAmount += 640
                 }) {
                     Text("Roll")
@@ -136,7 +143,7 @@ struct ContentView: View {
                     }
                     cx.myDice.diceArray[row].sides = value
                     cx.dieIndex = row      // used by resultView
-                    cx.myDice.calculateRoll(die: &cx.myDice.diceArray[row])
+                    cx.myDice.calculateRoll(die: cx.myDice.diceArray[row])
                     cx.animationAmount += 640
                 }) {
                     Text("Roll")
