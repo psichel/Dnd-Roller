@@ -99,7 +99,6 @@ class DiceStats: Codable {
     var history = [Int]()
     var average: String {
         get {
-            //history.count > 0 ? "\( Double(history.reduce(0, +)) / Double(history.count) )" : ""
             history.count > 0 ? String( format: "%.1f", Double(history.reduce(0, +)) / Double(history.count) ) : ""
         }
     }

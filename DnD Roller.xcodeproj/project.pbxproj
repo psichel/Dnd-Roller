@@ -22,7 +22,18 @@
 		D6CA6F9D2551B4C3001E5CEA /* Credits.md in Resources */ = {isa = PBXBuildFile; fileRef = D6CA6F9C2551B4C3001E5CEA /* Credits.md */; };
 		D6CA6FA12551B561001E5CEA /* MDText in Frameworks */ = {isa = PBXBuildFile; productRef = D6CA6FA02551B561001E5CEA /* MDText */; };
 		D6CA6FA4255211CC001E5CEA /* CreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CA6FA3255211CC001E5CEA /* CreditsView.swift */; };
+		D6FCEEBA255FF65D003BAC52 /* DnD_RollerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FCEEB9255FF65D003BAC52 /* DnD_RollerTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D6FCEEBC255FF65D003BAC52 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D6C8DF072541D6FD00669E2B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D6C8DF0E2541D6FD00669E2B;
+			remoteInfo = "DnD Roller";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		D612D0BF25473C6900EEE9D7 /* JaeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JaeView.swift; sourceTree = "<group>"; };
@@ -41,6 +52,9 @@
 		D6CA6F962550C03D001E5CEA /* WahWah.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = WahWah.mp3; sourceTree = "<group>"; };
 		D6CA6F9C2551B4C3001E5CEA /* Credits.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Credits.md; sourceTree = SOURCE_ROOT; };
 		D6CA6FA3255211CC001E5CEA /* CreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsView.swift; sourceTree = "<group>"; };
+		D6FCEEB7255FF65D003BAC52 /* DnD RollerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DnD RollerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6FCEEB9255FF65D003BAC52 /* DnD_RollerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnD_RollerTests.swift; sourceTree = "<group>"; };
+		D6FCEEBB255FF65D003BAC52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +67,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D6FCEEB4255FF65D003BAC52 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -60,6 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				D6C8DF112541D6FD00669E2B /* DnD Roller */,
+				D6FCEEB8255FF65D003BAC52 /* DnD RollerTests */,
 				D6C8DF102541D6FD00669E2B /* Products */,
 				D6CA6F902550BFFD001E5CEA /* Frameworks */,
 			);
@@ -69,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				D6C8DF0F2541D6FD00669E2B /* DnD Roller.app */,
+				D6FCEEB7255FF65D003BAC52 /* DnD RollerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,6 +141,15 @@
 			path = Sounds;
 			sourceTree = SOURCE_ROOT;
 		};
+		D6FCEEB8255FF65D003BAC52 /* DnD RollerTests */ = {
+			isa = PBXGroup;
+			children = (
+				D6FCEEB9255FF65D003BAC52 /* DnD_RollerTests.swift */,
+				D6FCEEBB255FF65D003BAC52 /* Info.plist */,
+			);
+			path = "DnD RollerTests";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -142,17 +174,39 @@
 			productReference = D6C8DF0F2541D6FD00669E2B /* DnD Roller.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D6FCEEB6255FF65D003BAC52 /* DnD RollerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D6FCEEC0255FF65D003BAC52 /* Build configuration list for PBXNativeTarget "DnD RollerTests" */;
+			buildPhases = (
+				D6FCEEB3255FF65D003BAC52 /* Sources */,
+				D6FCEEB4255FF65D003BAC52 /* Frameworks */,
+				D6FCEEB5255FF65D003BAC52 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D6FCEEBD255FF65D003BAC52 /* PBXTargetDependency */,
+			);
+			name = "DnD RollerTests";
+			productName = "DnD RollerTests";
+			productReference = D6FCEEB7255FF65D003BAC52 /* DnD RollerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		D6C8DF072541D6FD00669E2B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1200;
+				LastSwiftUpdateCheck = 1230;
 				LastUpgradeCheck = 1200;
 				TargetAttributes = {
 					D6C8DF0E2541D6FD00669E2B = {
 						CreatedOnToolsVersion = 12.0.1;
+					};
+					D6FCEEB6255FF65D003BAC52 = {
+						CreatedOnToolsVersion = 12.3;
+						TestTargetID = D6C8DF0E2541D6FD00669E2B;
 					};
 				};
 			};
@@ -173,6 +227,7 @@
 			projectRoot = "";
 			targets = (
 				D6C8DF0E2541D6FD00669E2B /* DnD Roller */,
+				D6FCEEB6255FF65D003BAC52 /* DnD RollerTests */,
 			);
 		};
 /* End PBXProject section */
@@ -188,6 +243,13 @@
 				D6CA6F9D2551B4C3001E5CEA /* Credits.md in Resources */,
 				D6C8DF172541D70300669E2B /* Assets.xcassets in Resources */,
 				D6CA6F982550C03D001E5CEA /* Roll.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D6FCEEB5255FF65D003BAC52 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,7 +291,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D6FCEEB3255FF65D003BAC52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D6FCEEBA255FF65D003BAC52 /* DnD_RollerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D6FCEEBD255FF65D003BAC52 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D6C8DF0E2541D6FD00669E2B /* DnD Roller */;
+			targetProxy = D6FCEEBC255FF65D003BAC52 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D6C8DF1C2541D70300669E2B /* Debug */ = {
@@ -392,6 +470,48 @@
 			};
 			name = Release;
 		};
+		D6FCEEBE255FF65D003BAC52 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = G3B72QC3F7;
+				INFOPLIST_FILE = "DnD RollerTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sustworks.DnD-RollerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DnD Roller.app/DnD Roller";
+			};
+			name = Debug;
+		};
+		D6FCEEBF255FF65D003BAC52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = G3B72QC3F7;
+				INFOPLIST_FILE = "DnD RollerTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sustworks.DnD-RollerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DnD Roller.app/DnD Roller";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -409,6 +529,15 @@
 			buildConfigurations = (
 				D6C8DF1F2541D70300669E2B /* Debug */,
 				D6C8DF202541D70300669E2B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D6FCEEC0255FF65D003BAC52 /* Build configuration list for PBXNativeTarget "DnD RollerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D6FCEEBE255FF65D003BAC52 /* Debug */,
+				D6FCEEBF255FF65D003BAC52 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -162,6 +162,7 @@ struct ContentView: View {
     
     func resetDice() {
         myDice.diceArray = Dice.defaultDice
+        _ = myDice.diceArray.map { $0.diceStats.history.removeAll() }
         myDice.diceArray[customDieOffset].sidesStr = "100"
         dieIndex = 1
         myDice.rollMessage = ""
