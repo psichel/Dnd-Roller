@@ -186,7 +186,7 @@ struct ContentView: View {
                     .animation(enableAnimation ? Animation.linear(duration: 1.25) : Animation.linear(duration: 0.0))
                     .scaleEffect(cx.myDice.diceArray[cx.dieIndex].imageScale)
                     .frame(minWidth: 60, maxWidth: .infinity, minHeight: 60, maxHeight: .infinity, alignment: .center)
-                    //.padding(.vertical, -30)
+                    .padding(.vertical, -10)
             }
         }
     }
