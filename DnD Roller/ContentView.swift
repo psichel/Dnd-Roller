@@ -183,7 +183,7 @@ struct ContentView: View {
                     .cornerRadius(10)
                 Image(cx.myDice.diceArray[cx.dieIndex].imageName)
                     .rotationEffect(.degrees(cx.animationAmount))
-                    .animation(enableAnimation ? Animation.linear(duration: 1.25) : Animation.linear(duration: 0.0))
+                    .animation(enableAnimation ? Animation.easeOut(duration: 1.25) : Animation.linear(duration: 0.0))
                     .scaleEffect(cx.myDice.diceArray[cx.dieIndex].imageScale)
                     .frame(minWidth: 60, maxWidth: .infinity, minHeight: 60, maxHeight: .infinity, alignment: .center)
                     .padding(.vertical, -10)
