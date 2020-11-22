@@ -12,10 +12,11 @@ struct ContentView: View {
     @State private var dieIndex = 1
     @State private var customDieOffset = 6      // must be updated if array size changes
     @State private var animationAmount = 0.0
+    @State private var showingJaeSheet = false
+    let generator = UIImpactFeedbackGenerator(style: .medium)
     
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @State private var showingJaeSheet = false
     
     var body: some View {
         
@@ -66,6 +67,7 @@ struct ContentView: View {
                 UserDefaults.standard.set(true, forKey: "initialized")
                 UserDefaults.standard.set(true, forKey: "enableSound")
                 UserDefaults.standard.set(true, forKey: "enableAnimation")
+                UserDefaults.standard.set(true, forKey: "enableHaptic")
             }
         }
     }
@@ -89,6 +91,12 @@ struct ContentView: View {
                     cx.dieIndex = row   // used by resultView
                     cx.myDice.calculateRoll(die: cx.myDice.diceArray[row])
                     cx.animationAmount += 640
+                    // haptic feedback
+                    let enableHaptic = UserDefaults.standard.bool(forKey: "enableHaptic")
+                    if enableHaptic {
+                        cx.generator.prepare()
+                        cx.generator.impactOccurred()
+                    }
                 }) {
                     Text("Roll")
                         .frame(width: 60, height: nil)
@@ -145,6 +153,12 @@ struct ContentView: View {
                     cx.dieIndex = row      // used by resultView
                     cx.myDice.calculateRoll(die: cx.myDice.diceArray[row])
                     cx.animationAmount += 640
+                    // haptic feedback
+                    let enableHaptic = UserDefaults.standard.bool(forKey: "enableHaptic")
+                    if enableHaptic {
+                        cx.generator.prepare()
+                        cx.generator.impactOccurred()
+                    }
                 }) {
                     Text("Roll")
                         .frame(width: 60, height: nil)

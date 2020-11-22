@@ -12,12 +12,14 @@ struct SettingsView: View {
     
     @AppStorage("enableSound") private var enableSound = true
     @AppStorage("enableAnimation") private var enableAnimation = true
+    @AppStorage("enableHaptic") private var enableHaptic = true
     
     var body: some View {
         Form {
             Section(header: Text("Settings")) {
                 Toggle("Sound", isOn: $enableSound)
                 Toggle("Animation", isOn: $enableAnimation)
+                Toggle("Haptic", isOn: $enableHaptic)
                 Button("Reset Dice") {
                     cx.resetDice()
                 }
