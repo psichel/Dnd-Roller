@@ -67,6 +67,32 @@ class DnD_RollerTests: XCTestCase {
         XCTAssertEqual(die4.diceStats.average, "12.0", "Average should be 12")
     }
     
+    func testCustomDiceStats() throws {
+        let cx = ContentView()
+        cx.resetDice()
+        let myDice = cx.myDice
+        // 4 d100 custome
+        var dieCustom = myDice.diceArray[cx.customDieOffset]
+        dieCustom.howMany = 4
+        // roll
+        myDice.calculateRoll(die: dieCustom)
+        XCTAssertEqual(dieCustom.diceStats.history.count, 4, "Dice Stats should have 4 entries")
+        myDice.calculateRoll(die: dieCustom)
+        XCTAssertEqual(dieCustom.diceStats.history.count, 8, "Dice Stats should have 8 entries")
+        myDice.calculateRoll(die: dieCustom)
+        XCTAssertEqual(dieCustom.diceStats.history.count, 10, "Dice Stats should truncate at 10 entries")
+        dieCustom.diceStats.addDieRoll(42)
+        XCTAssertEqual(dieCustom.diceStats.history[0], 42, "addDieRoll inserts at front of list")
+        XCTAssertEqual(dieCustom.diceStats.history.count, 10, "Still 10 entries after insert")
+        // reset stats
+        cx.resetDice()
+        dieCustom = myDice.diceArray[cx.customDieOffset]
+        XCTAssertEqual(dieCustom.diceStats.history.count, 0, "Stats should reset to empty")
+        // calculate average
+        dieCustom.diceStats.addDieRoll(8)
+        dieCustom.diceStats.addDieRoll(16)
+        XCTAssertEqual(dieCustom.diceStats.average, "12.0", "Average should be 12")
+    }
     
 //    func testPerformanceExample() throws {
 //        // This is an example of a performance test case.

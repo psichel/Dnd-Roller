@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var myDice = Dice()
     @State private var dieIndex = 1
-    @State private var customDieOffset = 6      // must be updated if array size changes
+    @State var customDieOffset = 6      // must be updated if array size changes
     @State private var animationAmount = 0.0
     @State private var showingJaeSheet = false
     let generator = UIImpactFeedbackGenerator(style: .medium)
